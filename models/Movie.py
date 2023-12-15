@@ -1,15 +1,15 @@
-class Movie:
-    def __init__(self, id_movie, title, description, gen):
-        self.__id_movie = id_movie
+from models.Entity import Entity
+
+
+class Movie(Entity):
+    def __init__(self, title, description, gen):
+        super().__init__()
         self.__title = title
         self.__description = description
         self.__gen = gen
 
     def get_id_movie(self):
-        return self.__id_movie
-
-    def set_id_movie(self, id_movie):
-        self.__id_movie = id_movie
+        return self.get_id_entity()
 
     def get_title(self):
         return self.__title
@@ -30,7 +30,7 @@ class Movie:
         self.__gen = gen
 
     def __eq__(self, other):
-        return (self.__id_movie == other.__id_movie and self.__title == other
+        return (self.__id_entity == other.__id_entity and self.__title == other
                 and self.__description == other and self.__gen == other.__gen)
 
     def __str__(self):
