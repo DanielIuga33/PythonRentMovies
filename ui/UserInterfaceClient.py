@@ -28,10 +28,11 @@ class UserInterfaceClient:
     def add(self):
         name = input("Enter Client name: ")
         surname = input("Enter Client surname: ")
+        email = input("Enter Client email: ")
         cnp = input("Enter Client cnp: ")
         age = input("Enter Client age: ")
         try:
-            self.srv_cl.add(name, surname, cnp, age)
+            self.srv_cl.add(name, surname, email, cnp, age)
         except ValueError as e:
             print(f"Errors: {e}")
 

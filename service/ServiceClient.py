@@ -7,16 +7,17 @@ from repository.RepoFile import RepoFile
 class ServiceClient:
     def __init__(self, repo: RepoFile):
         self.__repo = repo
-        self.__validator = ClientValidator
-        self.__mapper = ClientMapper
+        self.__validator = ClientValidator()
+        self.__mapper = ClientMapper()
 
     def add(self, name, surname, email, cnp, age):
         if self.exists(email, "email"):
             raise ValueError("Email already exists")
         if self.exists(cnp, "cnp"):
             raise ValueError("CNP already exists")
-        self.__validator.validate(self, Client(name, surname, email, cnp, age))
-        self.__repo.add(Client(name, surname, email, cnp, age))
+        client = Client(name, surname, email, cnp, age)
+        self.__validator.validate(client)
+        self.__repo.add(client)
 
     def remove(self, item):
         if self.exists(item, "name"):
@@ -88,7 +89,7 @@ class ServiceClient:
         return result
 
     def get_all_dto(self):
-        return self.__mapper.fromListsEntityToDtoList(self, self.get_all())
+        return self.__mapper.fromListsEntityToDtoList(self.get_all())
 
     def size(self):
         return len(self.__repo.get_all())

@@ -33,4 +33,4 @@ class RepoFile:
         self.__repo.append(entity_new)
 
     def get_all(self):
-        return self.__repo
+        return self.__read()

@@ -4,6 +4,7 @@ from models.Client import Client
 class ClientValidator:
     def validate(self, client: Client):
         errors = []
+        print(client.get_email())
         if client.get_name() == "":
             errors.append("Name cannot be null !")
         if client.get_surname() == "":

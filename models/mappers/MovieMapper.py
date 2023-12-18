@@ -4,7 +4,7 @@ from models.dto.MovieDto import MovieDto
 
 class ClientMapper:
     def fromEntityToDto(self, entity: Movie):
-        return MovieDto(entity.get_id_movie(), entity.get_title(), entity.get_rating(), entity.)
+        return MovieDto(entity.get_id_movie(), entity.get_title(), entity.get_duration(), entity.get_rating())
 
     def fromListsEntityToDto(self, entityLists):
         result = []
