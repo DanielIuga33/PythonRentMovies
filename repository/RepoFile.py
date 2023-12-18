@@ -11,19 +11,13 @@ class RepoFile:
         result = []
         lines = lines.split("\n")
         for line in lines:
-            line = line.split("~")
-            if len(line) > 1:
-                lista = []
-                for i in line:
-                    lista.append(i)
-                result.append(lista)
+            result.append(line)
         return result
 
     def __write_file(self):
         with open(self.__filename, "w") as file:
             for entity in self.__repo:
-                file.write(f"{entity.__str__()}~")
-                file.write("\n")
+                file.write(f"{entity.__str__()}\n")
 
     def add(self, entity):
         self.__repo.append(entity)
@@ -39,4 +33,3 @@ class RepoFile:
 
     def get_all(self):
         return self.__repo
-

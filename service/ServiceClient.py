@@ -5,14 +5,14 @@ from repository.RepoFile import RepoFile
 
 
 class ServiceClient:
-    def __init__(self, repo: RepoFile, validator: ClientValidator, mapper: ClientMapper):
+    def __init__(self, repo: RepoFile):
         self.__repo = repo
-        self.__validator = validator
-        self.__mapper = mapper
+        self.__validator = ClientValidator
+        self.__mapper = ClientMapper
 
     def add(self, name, surname, cnp, age):
         client = Client(name, surname, cnp, age)
-        #self.__validator.validate(client)
+        self.__validator.validate(self, client)
         self.__repo.add(Client(name, surname, cnp, age))
 
     def remove(self, item):

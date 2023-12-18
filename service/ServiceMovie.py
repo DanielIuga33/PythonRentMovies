@@ -5,13 +5,13 @@ from repository.RepoFile import RepoFile
 
 
 class ServiceMovie:
-    def __init__(self, repo: RepoFile, validator: MovieValidator, mapper: MovieMapper):
+    def __init__(self, repo: RepoFile):
         self.__repo = repo
-        self.__validator = validator
-        self.__mapper = mapper
+        self.__validator = MovieValidator
+        self.__mapper = MovieMapper
 
     def add(self, title, description, gen):
-        self.__validator.validate(Movie(title, description, gen))
+        self.__validator.validate(self, Movie(title, description, gen))
         self.__repo.add(Movie(title, description, gen))
 
     def remove_by_title(self, item):

@@ -14,6 +14,9 @@ class Client(Entity):
     def get_client_id(self):
         return self.__id_entity
 
+    def set_client_id(self, ids):
+        self.__id_entity = ids
+
     def get_name(self):
         return self.__name
 
@@ -43,5 +46,6 @@ class Client(Entity):
                 and self.__surname == other and self.__cnp == other.__cnp and self.__age == other.__age)
 
     def __str__(self):
-        return str(self)
+        return (f"{self.get_id_entity()}~{self.__name}~{self.__surname}"
+                f"~{self.__cnp}~{self.__age}")
 

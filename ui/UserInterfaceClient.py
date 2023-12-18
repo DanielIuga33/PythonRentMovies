@@ -1,5 +1,6 @@
 from service.ServiceClient import ServiceClient
 from service.ServiceMovie import ServiceMovie
+from utils.Functions import show_all
 from utils.Prints import print_movie_menu, print_client_menu
 
 
@@ -17,6 +18,8 @@ class UserInterfaceClient:
                     self.add()
                 case "2":
                     self.remove()
+                case "a":
+                    show_all(self.srv_cl.get_all_dto())
                 case "x":
                     return
                 case _:
@@ -27,7 +30,10 @@ class UserInterfaceClient:
         surname = input("Enter Client surname: ")
         cnp = input("Enter Client cnp: ")
         age = input("Enter Client age: ")
-        self.srv_cl.add(name, surname, cnp, age)
+        try:
+            self.srv_cl.add(name, surname, cnp, age)
+        except ValueError as e:
+            print(f"Errors: {e}")
 
     def remove(self):
         choice = input(" {a} Name\n {b} Surname\n {c} CNP\nDo you want to remove by: ")
