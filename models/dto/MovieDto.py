@@ -6,4 +6,6 @@ from dataclasses import dataclass
 class MovieDto:
     id_movie: uuid
     title: str
+    gen: str
+    rating: float
 

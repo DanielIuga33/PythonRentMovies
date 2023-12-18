@@ -11,7 +11,8 @@ class RepoFile:
         result = []
         lines = lines.split("\n")
         for line in lines:
-            result.append(line)
+            if len(line) > 0:
+                result.append(line)
         return result
 
     def __write_file(self):

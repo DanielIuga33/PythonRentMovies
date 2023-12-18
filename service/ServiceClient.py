@@ -10,10 +10,13 @@ class ServiceClient:
         self.__validator = ClientValidator
         self.__mapper = ClientMapper
 
-    def add(self, name, surname, cnp, age):
-        client = Client(name, surname, cnp, age)
-        self.__validator.validate(self, client)
-        self.__repo.add(Client(name, surname, cnp, age))
+    def add(self, name, surname, email, cnp, age):
+        if self.exists(email, "email"):
+            raise ValueError("Email already exists")
+        if self.exists(cnp, "cnp"):
+            raise ValueError("CNP already exists")
+        self.__validator.validate(self, Client(name, surname, email, cnp, age))
+        self.__repo.add(Client(name, surname, email, cnp, age))
 
     def remove(self, item):
         if self.exists(item, "name"):
@@ -21,6 +24,9 @@ class ServiceClient:
             return 1
         elif self.exists(item, "surname"):
             self.__repo.delete(self.find(item, "surname"))
+            return 1
+        elif self.exists(item, "email"):
+            self.__repo.delete(self.find(item, "email"))
             return 1
         elif self.exists(item, "cnp"):
             self.__repo.delete(self.find(item, "cnp"))
@@ -43,6 +49,11 @@ class ServiceClient:
                     if entity.get_cnp() == item:
                         return entity
                 return 0
+            case "email":
+                for entity in self.__repo.get_all():
+                    if entity.get_email() == item:
+                        return entity
+                return 0
             case _:
                 return
 
@@ -60,14 +71,24 @@ class ServiceClient:
                 if self.find(item, "cnp") == 0:
                     return False
                 return True
+            case "email":
+                if self.find(item, "email") == 0:
+                    return False
+                return True
             case _:
                 return
 
     def get_all(self):
-        return self.__repo.get_all()
+        result = []
+        for lines in self.__repo.get_all():
+            line = lines.split("~")
+            client = Client(line[1], line[2], line[3], line[4], line[5])
+            client.set_client_id(line[0])
+            result.append(client)
+        return result
 
     def get_all_dto(self):
-        return self.__mapper.fromListsEntityToDtoList(self.get_all())
+        return self.__mapper.fromListsEntityToDtoList(self, self.get_all())
 
     def size(self):
         return len(self.__repo.get_all())

@@ -4,10 +4,11 @@ from models.Entity import Entity
 
 
 class Client(Entity):
-    def __init__(self, name, surname, cnp, age):
+    def __init__(self, name, surname, email, cnp, age):
         super().__init__()
         self.__name = name
         self.__surname = surname
+        self.__email = email
         self.__cnp = cnp
         self.__age = age
 
@@ -29,6 +30,12 @@ class Client(Entity):
     def set_surname(self, name):
         self.__surname = name
 
+    def get_email(self):
+        return self.__email
+
+    def set_email(self, email):
+        self.__email = email
+
     def get_cnp(self):
         return self.__cnp
 
@@ -43,9 +50,9 @@ class Client(Entity):
 
     def __eq__(self, other):
         return (self.__id_entity == other.__id_entity and self.__name == other.__name
-                and self.__surname == other and self.__cnp == other.__cnp and self.__age == other.__age)
+                and self.__surname == other and self.__email == other.__email and
+                self.__cnp == other.__cnp and self.__age == other.__age)
 
     def __str__(self):
         return (f"{self.get_id_entity()}~{self.__name}~{self.__surname}"
-                f"~{self.__cnp}~{self.__age}")
-
+                f"~{self.__email}~{self.__cnp}~{self.__age}")
