@@ -1,3 +1,5 @@
+import uuid
+
 from service.ServiceClient import ServiceClient
 from service.ServiceMovie import ServiceMovie
 from utils.Functions import show_all
@@ -26,18 +28,20 @@ class UserInterfaceClient:
                     print("Invalid choice !")
 
     def add(self):
+        id_cl = uuid.uuid4()
         name = input("Enter Client name: ")
         surname = input("Enter Client surname: ")
         email = input("Enter Client email: ")
         cnp = input("Enter Client cnp: ")
         age = input("Enter Client age: ")
         try:
-            self.srv_cl.add(name, surname, email, cnp, age)
+            self.srv_cl.add(id_cl, name, surname, email, cnp, age)
+            print("  Client added successfully")
         except ValueError as e:
-            print(f"Errors: {e}")
+            print(f"  Errors: {e}")
 
     def remove(self):
-        choice = input(" {a} Name\n {b} Surname\n {c} CNP\nDo you want to remove by: ")
+        choice = input(" {a} Name\n {b} Surname\n {c} Email\n {x}Exit\nDo you want to remove by: ")
         by_what = ""
         match choice:
             case "a":
@@ -45,10 +49,16 @@ class UserInterfaceClient:
             case "b":
                 by_what = "surname"
             case "c":
-                by_what = "CNP"
+                by_what = "email"
             case "x":
                 return
             case _:
-                print("Invalid choice !")
+                print("  Invalid choice !")
+                return
+        show_all(self.srv_cl.get_all_dto())
         item = input(f"Enter the {by_what} of the Client to remove: ")
-        self.srv_cl.remove(item)
+        try:
+            self.srv_cl.remove(item, by_what)
+            print("Client deleted successfully")
+        except ValueError as e:
+            print(f"  Error: {e}")

@@ -10,12 +10,11 @@ from ui.UserInterface import UserInterface
 
 def main():
     repo_cl = RepoFile("Clients")
-    # client_val = ClientValidator
-    # client_mapper = ClientMapper
     srv_cl = ServiceClient(repo_cl)
 
     repo_mv = RepoFile("Movies")
     srv_mv = ServiceMovie(repo_mv)
+
     ui = UserInterface(srv_cl, srv_mv)
     ui.run()
 

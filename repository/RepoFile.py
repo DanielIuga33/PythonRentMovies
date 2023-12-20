@@ -25,7 +25,7 @@ class RepoFile:
         self.__write_file()
 
     def delete(self, entity):
-        self.__repo.remove(entity)
+        self.__repo.remove(str(entity))
         self.__write_file()
 
     def update(self, entity_new, entity_old):

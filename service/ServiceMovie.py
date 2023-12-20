@@ -1,5 +1,5 @@
 from models.Movie import Movie
-from models.mappers import MovieMapper
+from models.mappers.MovieMapper import MovieMapper
 from models.validators.MovieValidator import MovieValidator
 from repository.RepoFile import RepoFile
 
@@ -7,51 +7,55 @@ from repository.RepoFile import RepoFile
 class ServiceMovie:
     def __init__(self, repo: RepoFile):
         self.__repo = repo
-        self.__validator = MovieValidator
-        self.__mapper = MovieMapper
+        self.__validator = MovieValidator()
+        self.__mapper = MovieMapper()
 
-    def add(self, title, description, gen):
-        self.__validator.validate(self, Movie(title, description, gen))
-        self.__repo.add(Movie(title, description, gen))
+    def add(self, id_mv, title, description, gen, duration, rating):
+        self.__validator.validate(Movie(id_mv, title, description, gen, duration, rating))
+        self.__repo.add(Movie(id_mv, title, description, gen, duration, rating))
 
     def remove_by_title(self, item):
         if self.exists(item, "title"):
             self.__repo.delete(self.find(item, "title"))
-            return 1
+        else:
+            raise ValueError("There is no movie with this title !")
 
-    def find(self, by_what, item):
+    def find(self, item, by_what):
         match by_what:
             case "title":
-                for entity in self.__repo.get_all():
-                    if entity.name == item:
+                for entity in self.get_all():
+                    if entity.get_title() == item:
                         return entity
-                return 0
+                return None
             case "description":
-                for entity in self.__repo.get_all():
-                    if entity.surname == item:
+                for entity in self.get_all():
+                    if entity.get_description() == item:
                         return entity
-                return 0
-            case _:
-                return -1
+                return None
 
-    def exists(self, by_what, item):
+    def exists(self, item, by_what):
         match by_what:
             case "title":
-                if self.find(item, "title") == 0:
+                if self.find(item, "title") is None:
                     return False
                 return True
             case "description":
-                if self.find(item, "description") == 0:
+                if self.find(item, "description") is None:
                     return False
                 return True
             case _:
                 return
 
     def get_all(self):
-        return self.__repo.get_all()
+        result = []
+        for lines in self.__repo.get_all():
+            line = lines.split("~")
+            client = Movie(line[0], line[1], line[2], line[3], line[4], line[5])
+            result.append(client)
+        return result
 
     def get_all_dto(self):
-        return self.__mapper.fromListsEntityToDtoList(self.get_all())
+        return self.__mapper.fromListsEntityToDto(self.get_all())
 
     def size(self):
         return len(self.__repo.get_all())

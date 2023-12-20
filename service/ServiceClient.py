@@ -10,70 +10,83 @@ class ServiceClient:
         self.__validator = ClientValidator()
         self.__mapper = ClientMapper()
 
-    def add(self, name, surname, email, cnp, age):
+    def add(self, id_client, name, surname, email, cnp, age):
         if self.exists(email, "email"):
             raise ValueError("Email already exists")
         if self.exists(cnp, "cnp"):
             raise ValueError("CNP already exists")
-        client = Client(name, surname, email, cnp, age)
+        client = Client(id_client, name, surname, email, cnp, age)
+        print(client)
         self.__validator.validate(client)
         self.__repo.add(client)
 
-    def remove(self, item):
-        if self.exists(item, "name"):
-            self.__repo.delete(self.find(item, "name"))
-            return 1
-        elif self.exists(item, "surname"):
-            self.__repo.delete(self.find(item, "surname"))
-            return 1
-        elif self.exists(item, "email"):
-            self.__repo.delete(self.find(item, "email"))
-            return 1
-        elif self.exists(item, "cnp"):
-            self.__repo.delete(self.find(item, "cnp"))
-            return 1
+    def remove(self, item, case):
+        if case == "name":
+            if self.exists(item, "name"):
+                self.__repo.delete(self.find(item, "name"))
+        elif case == "surname":
+            if self.exists(item, "surname"):
+                self.__repo.delete(self.find(item, "surname"))
+        elif case == "email":
+            if self.exists(item, "email"):
+                self.__repo.delete(self.find(item, "email"))
+        elif case == "cnp":
+            if self.exists(item, "cnp"):
+                self.__repo.delete(self.find(item, "cnp"))
 
-    def find(self, by_what, item):
+    def find(self, item, by_what):
         match by_what:
             case "name":
-                for entity in self.__repo.get_all():
-                    if entity.name == item:
-                        return entity
-                return 0
+                if self.__validator.validate_name(item):
+                    for entity in self.get_all():
+                        if entity.get_name() == item:
+                            return entity
+                    return None
+                else:
+                    raise ValueError("Name cannot be null !")
             case "surname":
-                for entity in self.__repo.get_all():
-                    if entity.surname == item:
-                        return entity
-                return 0
+                if self.__validator.validate_surname(item):
+                    for entity in self.get_all():
+                        if entity.get_surname() == item:
+                            return entity
+                    return None
+                else:
+                    raise ValueError("Surname cannot be null !")
             case "cnp":
-                for entity in self.__repo.get_all():
-                    if entity.get_cnp() == item:
-                        return entity
-                return 0
+                if self.__validator.validate_cnp(item):
+                    for entity in self.get_all():
+                        if entity.get_cnp() == item:
+                            return entity
+                    return None
+                else:
+                    raise ValueError("Invalid CNP !")
             case "email":
-                for entity in self.__repo.get_all():
-                    if entity.get_email() == item:
-                        return entity
-                return 0
+                if not self.__validator.validate_email(item):
+                    for entity in self.get_all():
+                        if entity.get_email() == item:
+                            return entity
+                    return None
+                else:
+                    raise ValueError("Invalid email !")
             case _:
                 return
 
-    def exists(self, by_what, item):
+    def exists(self, item, by_what):
         match by_what:
             case "name":
-                if self.find(item, "name") == 0:
+                if self.find(item, "name") is None:
                     return False
                 return True
             case "surname":
-                if self.find(item, "surname") == 0:
+                if self.find(item, "surname") is None:
                     return False
                 return True
             case "cnp":
-                if self.find(item, "cnp") == 0:
+                if self.find(item, "cnp") is None:
                     return False
                 return True
             case "email":
-                if self.find(item, "email") == 0:
+                if self.find(item, "email") is None:
                     return False
                 return True
             case _:
@@ -83,8 +96,7 @@ class ServiceClient:
         result = []
         for lines in self.__repo.get_all():
             line = lines.split("~")
-            client = Client(line[1], line[2], line[3], line[4], line[5])
-            client.set_client_id(line[0])
+            client = Client(line[0], line[1], line[2], line[3], line[4], line[5])
             result.append(client)
         return result
 
@@ -93,3 +105,4 @@ class ServiceClient:
 
     def size(self):
         return len(self.__repo.get_all())
+
