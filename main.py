@@ -5,17 +5,21 @@ from models.validators.MovieValidator import MovieValidator
 from repository.RepoFile import RepoFile
 from service.ServiceClient import ServiceClient
 from service.ServiceMovie import ServiceMovie
+from service.ServiceRent import ServiceRent
 from ui.UserInterface import UserInterface
 
 
 def main():
-    repo_cl = RepoFile("Clients")
+    repo_cl = RepoFile("Data/Clients")
     srv_cl = ServiceClient(repo_cl)
 
-    repo_mv = RepoFile("Movies")
+    repo_mv = RepoFile("Data/Movies")
     srv_mv = ServiceMovie(repo_mv)
 
-    ui = UserInterface(srv_cl, srv_mv)
+    repo_rent = RepoFile("Data/Rents")
+    srv_rent = ServiceRent(repo_rent)
+
+    ui = UserInterface(srv_cl, srv_mv, srv_rent)
     ui.run()
 
 

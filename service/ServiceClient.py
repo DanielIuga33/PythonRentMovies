@@ -36,6 +36,11 @@ class ServiceClient:
 
     def find(self, item, by_what):
         match by_what:
+            case "id":
+                for entity in self.get_all():
+                    if entity.get_id_entity() == item:
+                        return entity
+                return None
             case "name":
                 if self.__validator.validate_name(item):
                     for entity in self.get_all():
@@ -73,6 +78,10 @@ class ServiceClient:
 
     def exists(self, item, by_what):
         match by_what:
+            case "id":
+                if self.find(item, "id") is None:
+                    return False
+                return True
             case "name":
                 if self.find(item, "name") is None:
                     return False

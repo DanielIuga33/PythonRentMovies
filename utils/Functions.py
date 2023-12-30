@@ -1,7 +1,3 @@
-from typing import List
-
-from models.Client import Client
-
 
 def show_all(entities):
     if len(entities) == 0:
@@ -9,3 +5,4 @@ def show_all(entities):
         return
     for entity in entities:
         print(entity)
+

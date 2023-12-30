@@ -22,6 +22,11 @@ class ServiceMovie:
 
     def find(self, item, by_what):
         match by_what:
+            case "id":
+                for entity in self.get_all():
+                    if entity.get_id_entity() == item:
+                        return entity
+                return None
             case "title":
                 for entity in self.get_all():
                     if entity.get_title() == item:
@@ -35,6 +40,10 @@ class ServiceMovie:
 
     def exists(self, item, by_what):
         match by_what:
+            case "id":
+                if self.find(item, "id") is None:
+                    return False
+                return True
             case "title":
                 if self.find(item, "title") is None:
                     return False
