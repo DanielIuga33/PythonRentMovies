@@ -40,6 +40,8 @@ class Movie(Entity):
     def set_rating(self, rating):
         self.__rating = rating
 
+
+
     def __eq__(self, other):
         return (self.get_id_entity() == other.get_id_entity() and self.__title == other
                 and self.__description == other and self.__gen == other.__gen)
